@@ -16,45 +16,45 @@ func solveNQueens(n int) [][]string {
 	}
 	fmt.Println(board)
 	arr := [][]string{}
-    for i:=0;i<n;i++{
-         arr=backtrack(arr,board,[]string{board[i]},n)
-    }
+	for i := 0; i < n; i++ {
+		arr = backtrack(arr, board, []string{board[i]}, n,1)
+	}
 	return arr
 }
-func backtrack(arr [][]string,board []string,newBoard []string,n int) [][]string{
-    if n==len(newBoard){
-        if checkboard(newBoard,n){
-            a:=make([]string,n)
-            copy(a,newBoard)
-            arr=append(arr,a)
-        }
-        return arr
-    }
-    for i:=0;i<n;i++{
-        if !is(newBoard,board[i]){
-            newBoard=append(newBoard,board[i])
-            arr=backtrack(arr,board,newBoard,n)
-            newBoard=newBoard[0:len(newBoard)-1]
-        }
-    }
-    return arr
+func backtrack(arr [][]string, board []string, newBoard []string, n int,l int) [][]string {
+	if n == l {
+		if checkboard(newBoard, n) {
+			a := make([]string, n)
+			copy(a, newBoard)
+			arr = append(arr, a)
+		}
+		return arr
+	} else {
+		if len(newBoard)>3 && !checkboard(newBoard, l) {
+			return arr
+		}
+	}
+	for i := 0; i < n; i++ {
+		if !is(newBoard, board[i]) {
+			newBoard = append(newBoard, board[i])
+			arr = backtrack(arr, board, newBoard, n,l+1)
+			newBoard = newBoard[0 : len(newBoard)-1]
+		}
+	}
+	return arr
 }
-func is(arr []string,s string)bool{
-    for i:=0;i<len(arr);i++{
-        if arr[i]==s{
-            return true
-        }
-    }
-    return false
+func is(arr []string, s string) bool {
+	for i := 0; i < len(arr); i++ {
+		if arr[i] == s {
+			return true
+		}
+	}
+	return false
 }
 func checkboard(board []string, n int) bool {
-	for i := 0; i < n; i++ {
+	for i := 0; i < len(board); i++ {
 		j := strings.Index(board[i], "Q")
-		if !check(board, n, i, j) {
-			return false
-		}
-		j = strings.Index(board[n-1-i], "Q")
-		if !check(board, n, n-1-i, j) {
+		if !check(board, len(board), i, j) {
 			return false
 		}
 	}
